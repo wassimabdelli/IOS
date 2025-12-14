@@ -67,4 +67,22 @@ class UserModel: ObservableObject, Codable {
         // FIX 1: Encode optional academieId
         try container.encodeIfPresent(academieId, forKey: .academieId)
     }
+    }
+}
+
+extension String {
+    var roleColor: Color {
+        switch self.uppercased() {
+        case "OWNER":
+            return .green
+        case "ARBITRE":
+            return .yellow
+        case "COACH":
+            return .blue
+        case "JOUEUR":
+            return .gray
+        default:
+            return .gray
+        }
+    }
 }

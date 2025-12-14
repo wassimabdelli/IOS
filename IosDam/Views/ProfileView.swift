@@ -10,6 +10,7 @@ struct ProfileView: View {
     @State private var user: UserProfile = .mock
     @State private var achievements: [Achievement] = Achievement.mockAchievements
     @State private var matches: [MatchResultProfile] = MatchResultProfile.mockMatches
+    @AppStorage("user_role") var currentUserRole: String = "OWNER"
     
     var body: some View {
         ScrollView {
@@ -18,12 +19,12 @@ struct ProfileView: View {
                 customHeader
                 
                 // Main Profile Card
-                MainProfileCardView(user: user)
+                MainProfileCardView(user: user, themeColor: currentUserRole.roleColor)
                 
                 Spacer().frame(height: 16)
                 
                 // Quick Stats Grid
-                QuickStatsGridView(user: user)
+                QuickStatsGridView(user: user, themeColor: currentUserRole.roleColor)
                 
                 Spacer().frame(height: 8)
                 
@@ -42,7 +43,7 @@ struct ProfileView: View {
     private var achievementsAndMatchesSection: some View {
         Group {
             // Achievements Section
-            SectionHeaderView(title: "Achievements", showViewAll: true)
+            SectionHeaderView(title: "Achievements", showViewAll: true, themeColor: currentUserRole.roleColor)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
@@ -56,7 +57,7 @@ struct ProfileView: View {
             Spacer().frame(height: 8)
             
             // Recent Matches Section
-            SectionHeaderView(title: "Recent Matches", showViewAll: true)
+            SectionHeaderView(title: "Recent Matches", showViewAll: true, themeColor: currentUserRole.roleColor)
             
             VStack(spacing: 0) {
                 ForEach(matches) { match in
@@ -72,8 +73,8 @@ struct ProfileView: View {
     
     private var footerSection: some View {
         Group {
-            FooterDetailRowView(iconName: "location.fill", title: "Favorite Stadium", value: user.favoriteStadium)
-            FooterDetailRowView(iconName: "calendar", title: "Member Since", value: user.memberSince)
+            FooterDetailRowView(iconName: "location.fill", title: "Favorite Stadium", value: user.favoriteStadium, themeColor: currentUserRole.roleColor)
+            FooterDetailRowView(iconName: "calendar", title: "Member Since", value: user.memberSince, themeColor: currentUserRole.roleColor)
             
             Spacer().frame(height: 32)
         }
@@ -105,6 +106,7 @@ struct ProfileView: View {
 
 struct MainProfileCardView: View {
     let user: UserProfile
+    let themeColor: Color
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -133,7 +135,7 @@ struct MainProfileCardView: View {
                     // Level Badge
                     Text("Level \(user.level)")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(Color(hex: "4CAF50"))
+                        .foregroundColor(themeColor)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
                         .background(Color.white.opacity(0.8))
@@ -155,7 +157,7 @@ struct MainProfileCardView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(Color(hex: "4CAF50"))
+        .background(themeColor)
         .cornerRadius(20)
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
@@ -189,16 +191,17 @@ struct ProfileStatCircleView: View {
 
 struct QuickStatsGridView: View {
     let user: UserProfile
+    let themeColor: Color
     
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 16) {
-                QuickStatCardView(iconName: "sportscourt.fill", iconColor: "2196F3", value: "\(user.goalsScored)", label: "Goals Scored")
-                QuickStatCardView(iconName: "arrow.up.right", iconColor: "673AB7", value: "\(user.assists)", label: "Assists")
+                QuickStatCardView(iconName: "sportscourt.fill", iconColor: Color(hex: "2196F3"), value: "\(user.goalsScored)", label: "Goals Scored")
+                QuickStatCardView(iconName: "arrow.up.right", iconColor: Color(hex: "673AB7"), value: "\(user.assists)", label: "Assists")
             }
             HStack(spacing: 16) {
-                QuickStatCardView(iconName: "shield.fill", iconColor: "FF9800", value: "\(user.cleanSheets)", label: "Clean Sheets")
-                QuickStatCardView(iconName: "person.3.fill", iconColor: "4CAF50", value: "\(user.totalMatches)", label: "Total Matches")
+                QuickStatCardView(iconName: "shield.fill", iconColor: Color(hex: "FF9800"), value: "\(user.cleanSheets)", label: "Clean Sheets")
+                QuickStatCardView(iconName: "person.3.fill", iconColor: themeColor, value: "\(user.totalMatches)", label: "Total Matches")
             }
         }
         .padding(.horizontal, 16)
@@ -209,7 +212,7 @@ struct QuickStatsGridView: View {
 
 struct QuickStatCardView: View {
     let iconName: String
-    let iconColor: String
+    let iconColor: Color
     let value: String
     let label: String
     
@@ -217,7 +220,7 @@ struct QuickStatCardView: View {
         VStack(alignment: .leading, spacing: 8) {
             Image(systemName: iconName)
                 .font(.system(size: 24))
-                .foregroundColor(Color(hex: iconColor))
+                .foregroundColor(iconColor)
             
             Text(value)
                 .font(.system(size: 24, weight: .heavy))
@@ -239,6 +242,7 @@ struct QuickStatCardView: View {
 struct SectionHeaderView: View {
     let title: String
     let showViewAll: Bool
+    let themeColor: Color
     
     var body: some View {
         HStack {
@@ -252,10 +256,10 @@ struct SectionHeaderView: View {
                 HStack(spacing: 4) {
                     Text("View All")
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color(hex: "4CAF50"))
+                        .foregroundColor(themeColor)
                     Image(systemName: "chevron.right")
                         .font(.system(size: 14))
-                        .foregroundColor(Color(hex: "4CAF50"))
+                        .foregroundColor(themeColor)
                 }
             }
         }
@@ -357,12 +361,13 @@ struct FooterDetailRowView: View {
     let iconName: String
     let title: String
     let value: String
+    let themeColor: Color
     
     var body: some View {
         HStack(spacing: 16) {
             Image(systemName: iconName)
                 .font(.system(size: 24))
-                .foregroundColor(Color(hex: "4CAF50"))
+                .foregroundColor(themeColor)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)

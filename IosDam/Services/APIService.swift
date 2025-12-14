@@ -1220,7 +1220,7 @@ class APIService {
 
       // MARK: - Swap Players
     static func swapPlayers(idAcademie: String, idStarter: String, idSubstitute: String, categorie: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let url = URL(string: "\(baseURL)/equipes/toggle-starter-substitute/\(idAcademie)") else { return }
+        guard let url = URL(string: "\(APIConfig.baseURL)/equipes/toggle-starter-substitute/\(idAcademie)") else { return }
         
         let body: [String: Any] = [
             "idStarter": idStarter,

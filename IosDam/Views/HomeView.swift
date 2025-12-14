@@ -17,12 +17,16 @@ struct HomeView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 0) {
+                    // Welcome Header (Only on Home Tab)
+                    if selectedTab == 0 {
+                        welcomeHeader
+                    }
+                    
                     // Main Content - TabView
                     TabView(selection: $selectedTab) {
                         // Home Feed
                         ScrollView {
                             VStack(spacing: 20) {
-                                welcomeHeader
                                 quickActions
                                 Spacer()
                             }
@@ -78,7 +82,7 @@ struct HomeView: View {
                     }
                     .padding(.horizontal, 25)
                     .padding(.vertical, 12)
-                    .background(Color.white)
+                    .background(currentUserRole.roleColor.ignoresSafeArea(edges: .bottom))
                     .shadow(color: Color.black.opacity(0.1), radius: 6, y: -2)
                 }
             }
@@ -100,11 +104,11 @@ struct HomeView: View {
         VStack(spacing: 5) {
             Image(systemName: icon)
                 .font(.system(size: 20))
-                .foregroundColor(selectedTab == index ? Color.green : Color.gray)
+                .foregroundColor(selectedTab == index ? Color.white : Color.white.opacity(0.6))
 
             Text(label)
                 .font(.caption)
-                .foregroundColor(selectedTab == index ? Color.green : Color.gray)
+                .foregroundColor(selectedTab == index ? Color.white : Color.white.opacity(0.6))
         }
         .frame(maxWidth: .infinity)
         .onTapGesture {
@@ -131,12 +135,15 @@ struct HomeView: View {
             Text("Welcome Back! 👋")
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundColor(.white)
             
             Text("\(appStorageNom) \(appStoragePrenom)")
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(.white.opacity(0.8))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(currentUserRole.roleColor.ignoresSafeArea(edges: .top))
     }
     
     // MARK: - Quick Actions
