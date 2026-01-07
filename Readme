@@ -1,1 +1,489 @@
+# ⚽ PeakPlay - Soccer Academy Management System
 
+A comprehensive Android application for managing soccer academies, tournaments, teams, and player development. Built with modern Android technologies and Material Design 3.
+
+![Android](https://img.shields.io/badge/Platform-Android-green.svg)
+![Kotlin](https://img.shields.io/badge/Language-Kotlin-purple.svg)
+![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-blue.svg)
+![Min SDK](https://img.shields.io/badge/Min%20SDK-24-orange.svg)
+
+## 📱 Features
+
+### For Academy Owners
+- *Dashboard*: Real-time statistics for tournaments, players, and staff
+- *Tournament Management*: Create, manage, and track soccer tournaments
+- *Team Builder*: Organize teams across multiple categories (Kids, Youth, Junior, Senior)
+- *Player Assignment*: Search and assign players to teams efficiently
+- *Stadium Management*: Manage multiple stadium locations
+- *Staff Coordination*: Oversee coaches and referees
+- *Social Feed*: Share updates and engage with the community
+- *Calendar*: Schedule and track events
+
+### For Coaches
+- *Team Overview*: View assigned teams and rosters
+- *Game Plans*: Create and manage tactical strategies with formation diagrams
+- *Player Development*: Track player progress and performance
+- *Match Preparation*: Organize lineups and substitutions
+
+### For Referees
+- *Match Officiating*: Real-time match event recording (goals, cards, fouls)
+- *Match Schedule*: View assigned matches and tournaments
+- *Event Tracking*: Record detailed match statistics
+
+### For Players
+- *Profile Management*: Update personal information and stats
+- *Team Participation*: Join tournaments and view team schedules
+- *Social Networking*: Connect with other players and teams
+- *Performance Tracking*: View personal statistics and achievements
+
+## 🎨 Design
+
+The app features a *premium dark theme* with:
+- *Glassmorphism* effects for modern UI elements
+- *Vibrant gradients* (Lime to Cyan, Purple to Indigo, Orange to Red)
+- *Smooth animations* and transitions
+- *Material Design 3* components
+- *Responsive layouts* for various screen sizes
+
+## 🏗️ Architecture
+
+### Tech Stack
+- *Language*: Kotlin
+- *UI Framework*: Jetpack Compose
+- *Navigation*: Navigation Compose
+- *Networking*: Retrofit 2 + OkHttp
+- *Image Loading*: Coil
+- *Async*: Kotlin Coroutines
+- *Dependency Injection*: Manual (can be upgraded to Hilt/Koin)
+- *Storage*: SharedPreferences (via DataStore pattern)
+
+### Project Structure
+app/
+├── src/main/
+│   ├── java/tn/esprit/dam/
+│   │   ├── api/              # API interfaces and DTOs
+│   │   │   ├── equipe/       # Team-related APIs
+│   │   │   ├── CoupeDto.kt   # Tournament DTOs
+│   │   │   └── ...
+│   │   ├── components/        # Reusable UI components
+│   │   ├── data/             # Repository and data sources
+│   │   ├── screens/          # Screen composables
+│   │   ├── ui/theme/         # Theme and styling
+│   │   └── MainActivity.kt   # Main entry point
+│   └── res/
+│       ├── drawable/         # Images and icons
+│       └── values/           # Strings, colors, themes
+
+## 🚀 Getting Started
+
+### Prerequisites
+- *Android Studio*: Hedgehog | 2023.1.1 or newer
+- *JDK*: 17 or higher
+- *Min SDK*: 24 (Android 7.0)
+- *Target SDK*: 34 (Android 14)
+
+### Backend Setup
+1. Clone and set up the backend repository:
+cd inegrationbackend-V1-main
+npm install
+
+2. Configure environment variables (see backend ENV_SETUP.md)
+
+3. Start the backend server:
+npm run start:dev
+
+### Android App Setup
+
+1. *Clone the repository*:
+git clone <your-repo-url>
+cd AndroidDam-main
+
+2. *Open in Android Studio*:
+   - Open Android Studio
+   - Select "Open an Existing Project"
+   - Navigate to the AndroidDam-main folder
+
+3. *Configure API Base URL*:
+   
+   Edit app/src/main/java/tn/esprit/dam/data/ApiConfig.kt:
+   
+   
+   // For Android Emulator
+   const val API_BASE_URL = "http://10.0.2.2:3001/api/v1/"
+   
+   // For Physical Device (replace with your machine's IP)
+   // const val API_BASE_URL = "http://192.168.1.100:3001/api/v1/"
+   
+
+4. *Sync Gradle*:
+   - Click "Sync Project with Gradle Files" in Android Studio
+   - Wait for dependencies to download
+
+5. *Run the app*:
+   - Connect an Android device or start an emulator
+   - Click the "Run" button (or press Shift+F10)
+
+## 📚 Key Screens
+
+### Authentication Flow
+- *Splash Screen*: Animated welcome screen
+- *Onboarding*: 3-screen introduction carousel
+- *Login/Signup*: Role-based authentication (Owner, Coach, Referee, Player)
+- *Password Recovery*: Secure password reset flow
+
+### Main Features
+- *Home*: Personalized dashboard with quick actions
+- *Events*: Browse and join tournaments
+- *Calendar*: View scheduled matches and events
+- *Teams*: Manage team rosters and lineups
+- *Social*: Community feed and networking
+- *Profile*: User settings and statistics
+
+### Specialized Screens
+- *Tournament Creation*: Multi-step tournament setup with bracket generation
+- *Match Officiate*: Real-time match event recording (Referee only)
+- *Game Plan*: Tactical formation editor (Coach only)
+- *Assign Player*: Search and assign players to teams (Owner only)
+- *Stadium Management*: Create and manage venues (Owner only)
+
+## 🔑 User Roles
+
+| Role | Permissions |
+|------|------------|
+| *Owner* | Full access: Create tournaments, manage teams, assign players, manage stadiums and staff |
+| *Coach* | Create game plans, manage assigned teams, view player stats |
+| *Referee* | Officiate matches, record events, view assigned tournaments |
+| *Player* | Join tournaments, view teams, update profile, social features |
+
+## 🎯 API Integration
+
+The app connects to a Node.js/NestJS backend with the following endpoints:
+
+### Authentication
+- POST /auth/signup - User registration
+- POST /auth/login - User login
+- POST /auth/forgot-password - Password recovery
+- POST /auth/reset-password - Password reset
+
+### Tournaments (Coupes)
+- GET /coupes - List all tournaments
+- POST /coupes - Create tournament
+- GET /coupes/:id - Get tournament details
+- PATCH /coupes/:id - Update tournament
+- POST /coupes/:id/join - Join tournament
+
+### Teams (Equipes)
+- GET /equipes/membres/:idAcademie/:categorie - Get team members
+- GET /equipes/academie/:idAcademie - Get all academy teams
+- PATCH /equipes/add-joueur/:idAcademie - Add player to team
+
+### Matches
+- GET /match/:coupeId - Get tournament matches
+- PATCH /match/:matchId/event - Record match event (goals, cards, etc.)
+
+## 🎨 Theming
+
+### Color Palette
+// Primary Colors
+LimeGreen = #A3FF12
+CyanAccent = #00D9FF
+Purple = #7E22CE
+
+// Accent Colors
+OrangeAccent = #FB923C
+RedAccent = #EF4444
+PurpleAccent = #9333EA
+
+// Backgrounds
+BackgroundColor = #0A0E27
+BackgroundGradientEnd = #1A1F3A
+
+### Typography
+- *Headings*: Bold, 24-30sp
+- *Body*: Regular, 14-16sp
+- *Captions*: Medium, 12-14sp
+
+## 🧪 Testing
+
+### Manual Testing Checklist
+- [ ] Authentication flow (all roles)
+- [ ] Tournament creation and joining
+- [ ] Team management and player assignment
+- [ ] Match officiating and event recording
+- [ ] Social feed posting and interaction
+- [ ] Calendar event scheduling
+- [ ] Profile updates
+
+### Test Users
+Create test accounts for each role to explore full functionality:
+- Owner: owner@test.com
+- Coach: coach@test.com
+- Referee: referee@test.com
+- Player: player@test.com
+
+## 📦 Dependencies
+
+// Core Android
+implementation 'androidx.core:core-ktx:1.12.0'
+implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+implementation 'androidx.activity:activity-compose:1.8.2'
+
+// Jetpack Compose
+implementation platform('androidx.compose:compose-bom:2024.01.00')
+implementation 'androidx.compose.ui:ui'
+implementation 'androidx.compose.material3:material3'
+implementation 'androidx.navigation:navigation-compose:2.7.6'
+
+// Networking
+implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+
+// Image Loading
+implementation 'io.coil-kt:coil-compose:2.5.0'
+
+// Coroutines
+implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+
+## 🚧 Roadmap
+
+### Upcoming Features
+- [ ] Push notifications for match updates
+- [ ] Advanced statistics and analytics
+- [ ] Video analysis integration
+- [ ] Payment integration for tournament fees
+- [ ] Multi-language support
+- [ ] Dark/Light theme toggle
+- [ ] Offline mode support
+- [ ] Export reports (PDF)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (git checkout -b feature/AmazingFeature)
+3. Commit your changes (git commit -m 'Add some AmazingFeature')
+4. Push to the branch (git push origin feature/AmazingFeature)
+5. Open a Pull Request
+
+### Code Style
+- Follow Kotlin coding conventions
+- Use meaningful variable and function names
+- Add comments for complex logic
+- Keep composables focused and reusable
+- Use Material Design 3 guidelines
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👥 Authors
+
+- *Development Team* - Initial work and ongoing development
+
+## 🙏 Acknowledgments
+
+- Soccer App Design Guide for UI/UX inspiration
+- Material Design 3 for component library
+- Jetpack Compose community for resources and support
+
+## 📞 Support
+
+For issues, questions, or suggestions:
+- Create an issue in the repository
+- Contact the development team
+- Check documentation in the /docs folder
+
+---
+
+*Built with ❤️ for the soccer community*
+img.shields.io
+Ahmed
+PeakPlay - Soccer Academy Management System
+
+A comprehensive Android application for managing soccer academies, tournaments, teams, and player development.
+
+===============================================================================
+FEATURES
+===============================================================================
+
+For Academy Owners:
+- Dashboard with real-time statistics for tournaments, players, and staff
+- Tournament Management: Create, manage, and track soccer tournaments
+- Team Builder: Organize teams across multiple categories (Kids, Youth, Junior, Senior)
+- Player Assignment: Search and assign players to teams
+- Stadium Management: Manage multiple stadium locations
+- Staff Coordination: Oversee coaches and referees
+- Social Feed: Share updates with the community
+- Calendar: Schedule and track events
+
+For Coaches:
+- View assigned teams and rosters
+- Create game plans with formation diagrams
+- Track player progress and performance
+- Organize lineups and substitutions
+
+For Referees:
+- Real-time match event recording (goals, cards, fouls)
+- View assigned matches and tournaments
+- Record detailed match statistics
+
+For Players:
+- Update personal information and stats
+- Join tournaments and view team schedules
+- Connect with other players and teams
+- View personal statistics and achievements
+
+===============================================================================
+TECHNICAL DETAILS
+===============================================================================
+
+Language: Kotlin
+UI Framework: Jetpack Compose
+Min Android Version: 7.0 (API 24)
+Target Android Version: 14 (API 34)
+
+Key Libraries:
+- Jetpack Compose for modern UI
+- Retrofit for API calls
+- Coil for image loading
+- Coroutines for async operations
+- Navigation Compose for screen navigation
+
+===============================================================================
+GETTING STARTED
+===============================================================================
+
+Prerequisites:
+- Android Studio Hedgehog (2023.1.1) or newer
+- JDK 17 or higher
+- Android device or emulator
+
+Backend Setup:
+1. Navigate to backend folder: cd inegrationbackend-V1-main
+2. Install dependencies: npm install
+3. Start server: npm run start:dev
+
+Android App Setup:
+1. Open project in Android Studio
+2. Configure API URL in ApiConfig.kt:
+   - For Emulator: http://10.0.2.2:3001/api/v1/
+   - For Physical Device: http://YOUR_IP:3001/api/v1/
+3. Sync Gradle files
+4. Run the app
+
+===============================================================================
+USER ROLES
+===============================================================================
+
+Owner: Full access to all features - create tournaments, manage teams, assign players, manage stadiums and staff
+
+Coach: Create game plans, manage assigned teams, view player statistics
+
+Referee: Officiate matches, record events, view assigned tournaments
+
+Player: Join tournaments, view teams, update profile, social features
+
+===============================================================================
+MAIN SCREENS
+===============================================================================
+
+Authentication:
+- Splash Screen
+- Onboarding (3 screens)
+- Login/Signup
+- Password Recovery
+
+Main Features:
+- Home Dashboard
+- Events/Tournaments
+- Calendar
+- Teams
+- Social Feed
+- Profile
+
+Specialized:
+- Tournament Creation
+- Match Officiate (Referee only)
+- Game Plan Editor (Coach only)
+- Assign Player (Owner only)
+- Stadium Management (Owner only)
+
+===============================================================================
+API ENDPOINTS
+===============================================================================
+
+Authentication:
+POST /auth/signup - Register new user
+POST /auth/login - User login
+POST /auth/forgot-password - Request password reset
+POST /auth/reset-password - Reset password
+
+Tournaments:
+GET /coupes - List all tournaments
+POST /coupes - Create tournament
+GET /coupes/:id - Get tournament details
+POST /coupes/:id/join - Join tournament
+
+Teams:
+GET /equipes/membres/:idAcademie/:categorie - Get team members
+GET /equipes/academie/:idAcademie - Get all academy teams
+PATCH /equipes/add-joueur/:idAcademie - Add player to team
+
+Matches:
+GET /match/:coupeId - Get tournament matches
+PATCH /match/:matchId/event - Record match event
+
+===============================================================================
+PROJECT STRUCTURE
+===============================================================================
+
+app/src/main/java/tn/esprit/dam/
+├── api/              API interfaces and data models
+├── components/       Reusable UI components
+├── data/            Repository and data sources
+├── screens/         Screen composables
+├── ui/theme/        Theme and styling
+└── MainActivity.kt  Main entry point
+
+===============================================================================
+DESIGN
+===============================================================================
+
+Theme: Premium dark theme with glassmorphism effects
+
+Primary Colors:
+- Lime Green: #A3FF12
+- Cyan Accent: #00D9FF
+- Purple: #7E22CE
+
+Accent Colors:
+- Orange: #FB923C
+- Red: #EF4444
+- Purple Accent: #9333EA
+
+Background:
+- Dark Blue: #0A0E27
+- Gradient End: #1A1F3A
+
+===============================================================================
+UPCOMING FEATURES
+===============================================================================
+
+- Push notifications for match updates
+- Advanced statistics and analytics
+- Video analysis integration
+- Payment integration for tournament fees
+- Multi-language support
+- Dark/Light theme toggle
+- Offline mode support
+- Export reports to PDF
+
+===============================================================================
+SUPPORT
+===============================================================================
+
+For issues or questions, create an issue in the repository or contact the development team.
+
+Built with love for the soccer community.
